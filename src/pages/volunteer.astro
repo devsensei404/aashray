@@ -1,11 +1,152 @@
 ---
-import ComingSoonPage from '../components/ComingSoonPage.astro';
-import { messages } from '../data/contact.js';
+import Layout from '../layouts/Layout.astro';
+import WhatsAppLink from '../components/WhatsAppLink.astro';
+import { messages, visitingHours, volunteerFormUrl } from '../data/contact.js';
+import { volunteering } from '../data/site-settings.js';
+
+const { commitmentWeeks, minimumAge, juniorsNeedParentConsent, timings, afterApplying } = volunteering;
+const ageText = `${minimumAge} or older.` + (juniorsNeedParentConsent ? ' Younger volunteers are welcome with a parent\'s or guardian\'s consent.' : '');
 ---
-<ComingSoonPage
+<Layout
   title="Volunteer | Aashray for Animals"
   description="Volunteer with Aashray for Animals in Durgapur. We need more people to help with our work."
-  heading="Volunteer"
-  lede="We do not have enough volunteers for the work that needs doing. If you can give your time, we would love to hear from you."
-  ctas={[{ label: 'Volunteer with us', message: messages.volunteering }]}
-/>
+>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Volunteer</h1>
+      <p class="lede">
+        We do not have enough volunteers for the work that needs doing. If you can give your time, we would love to hear from you.
+      </p>
+      <div class="cta">
+        {volunteerFormUrl
+          ? <a class="btn btn--primary" href={volunteerFormUrl} target="_blank" rel="noopener noreferrer">Apply to volunteer</a>
+          : <WhatsAppLink variant="primary" label="Volunteer via WhatsApp" message={messages.volunteering} />}
+        {volunteerFormUrl && (
+          <WhatsAppLink variant="outline" label="Or message us on WhatsApp" message={messages.volunteering} />
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="help">
+    <div class="wrap">
+      <h2 id="help">How you can help</h2>
+      <p class="copy">
+        There is always work to be done at our shelters, from caring for the animals to feeding them. Tell us how much time you have and what you are comfortable doing, and we will take it from there.
+      </p>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="expect">
+    <div class="wrap">
+      <h2 id="expect">What we expect</h2>
+      <div class="copy stack">
+        <p>
+          Volunteering here is hard, physical work. It is not an easy getaway, so please think about your own energy and whether you will find the work rewarding.
+        </p>
+        <p>
+          We work in the spirit of karma yoga, which means selfless service. We hope our volunteers are honest, calm, respectful and reliable, care about the details, work hard, and want to do good for the animals. We also ask everyone to help keep the shelter clean.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="apply">
+    <div class="wrap">
+      <h2 id="apply">Before you apply</h2>
+      <dl class="facts">
+        <dt>Age</dt>
+        <dd>{ageText}</dd>
+        {timings && (
+          <>
+            <dt>Timings</dt>
+            <dd>{timings}</dd>
+          </>
+        )}
+        {commitmentWeeks && (
+          <>
+            <dt>Commitment</dt>
+            <dd>{commitmentWeeks} weeks.</dd>
+          </>
+        )}
+        {afterApplying && (
+          <>
+            <dt>After you apply</dt>
+            <dd>{afterApplying}</dd>
+          </>
+        )}
+      </dl>
+      <div class="cta">
+        {volunteerFormUrl
+          ? <a class="btn btn--primary" href={volunteerFormUrl} target="_blank" rel="noopener noreferrer">Apply to volunteer</a>
+          : <WhatsAppLink variant="primary" label="Volunteer via WhatsApp" message={messages.volunteering} />}
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="visit">
+    <div class="wrap">
+      <h2 id="visit">Come and see first</h2>
+      <p class="copy">Not sure yet? Visit a shelter during visiting hours and see our work for yourself.</p>
+      <dl class="hours">
+        {visitingHours.map((h) => (
+          <>
+            <dt>{h.days}</dt>
+            <dd>{h.times.map((t) => <span class="time">{t}</span>)}</dd>
+          </>
+        ))}
+      </dl>
+      <a class="btn btn--link" href="/contact#visit">Find our shelters</a>
+    </div>
+  </section>
+
+  <section class="block paid">
+    <div class="wrap">
+      <p class="copy">
+        Looking for paid work with Aashray?
+        <a class="btn btn--link" href="/join-the-team">See paid positions</a>
+      </p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero { padding-block: clamp(3.5rem, 10vw, 8rem) var(--space-section); }
+  .hero h1 { margin-bottom: 1.5rem; }
+  .hero .lede { margin-bottom: 2.25rem; }
+
+  .cta { display: flex; flex-direction: column; gap: 0.75rem; }
+  @media (min-width: 40.01rem) { .cta { flex-direction: row; align-items: center; } }
+
+  .block { padding-block: var(--space-section); border-top: 1px solid var(--line); }
+  .block h2 { margin-bottom: 1.25rem; }
+  .copy { max-width: 36rem; color: var(--soft); }
+  .stack { display: grid; gap: 1rem; }
+
+  .facts, .hours {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem;
+    max-width: 36rem;
+    color: var(--soft);
+  }
+  .facts { margin-bottom: 2.25rem; }
+  .facts dt { margin-top: 1rem; color: var(--ink); font-weight: 600; }
+  .facts dt:first-child { margin-top: 0; }
+  @media (min-width: 40rem) {
+    .facts { grid-template-columns: 10rem minmax(0, 1fr); gap: 1rem 1.5rem; }
+    .facts dt { margin-top: 0; }
+  }
+
+  .hours {
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem 1.5rem;
+    margin-block: 1.75rem 0.75rem;
+    font-size: 0.9375rem;
+  }
+  .hours dt { color: var(--ink); }
+  .time { display: block; }
+
+  .paid { padding-block: clamp(2rem, 5vw, 3rem); }
+  .paid .copy { display: flex; flex-wrap: wrap; align-items: center; gap: 0 1rem; }
+</style>

@@ -1,0 +1,67 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { email } from '../data/contact.js';
+import { paidPositions } from '../data/site-settings.js';
+
+const { openings, applySubject } = paidPositions;
+const applyHref = `mailto:${email}?subject=${encodeURIComponent(applySubject)}`;
+---
+<Layout
+  title="Paid positions | Aashray for Animals"
+  description="Paid positions at Aashray for Animals in Durgapur, and how to apply."
+>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Join our team</h1>
+      <p class="lede">
+        Some roles at Aashray are paid. You can apply at any time, even when no opening is listed.
+      </p>
+      <div class="cta">
+        <a class="btn btn--primary" href={applyHref}>Apply by email</a>
+      </div>
+    </div>
+  </section>
+
+  {openings.length > 0 && (
+    <section class="block" aria-labelledby="open">
+      <div class="wrap">
+        <h2 id="open">Current openings</h2>
+        <ul class="openings">
+          {openings.map((o) => (
+            <li>
+              <h3>{o.title}</h3>
+              <p class="copy">{o.details}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <section class="block" aria-labelledby="general">
+    <div class="wrap">
+      <h2 id="general">General applications</h2>
+      <p class="copy">
+        Tell us about yourself and the kind of work you would like to do with us. If something suitable comes up, our team will get in touch.
+      </p>
+      <div class="cta">
+        <a class="btn btn--outline" href={applyHref}>Send a general application</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero { padding-block: clamp(3.5rem, 10vw, 8rem) var(--space-section); }
+  .hero h1 { margin-bottom: 1.5rem; }
+  .hero .lede { margin-bottom: 2.25rem; }
+  .cta { display: flex; flex-direction: column; gap: 0.75rem; }
+  @media (min-width: 40.01rem) { .cta { flex-direction: row; align-items: center; } }
+
+  .block { padding-block: var(--space-section); border-top: 1px solid var(--line); }
+  .block h2 { margin-bottom: 1.25rem; }
+  .copy { max-width: 36rem; color: var(--soft); }
+  .block .cta { margin-top: 2rem; }
+  .openings { display: grid; gap: 1.5rem; }
+  .openings h3 { margin-bottom: 0.35rem; }
+</style>

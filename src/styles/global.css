@@ -13,7 +13,7 @@
 
   --wrap: 1080px;
   --pad: clamp(1.25rem, 5vw, 2.5rem);
-  --space-section: clamp(4rem, 9vw, 7.5rem);
+  --space-section: clamp(4rem, 7vw, 5.5rem);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -109,6 +109,10 @@ h3 { font-size: 1.125rem; font-weight: 600; line-height: 1.3; }
   /* Main actions span the width of the screen: easier to hit with a thumb */
   .btn--primary, .btn--outline { width: 100%; justify-content: center; min-height: 3.25rem; }
 }
+
+/* Scroll reveal (added by the script in Layout.astro, only to content below the fold) */
+.reveal { opacity: 0; transform: translateY(1rem); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.is-visible { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

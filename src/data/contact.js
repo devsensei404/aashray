@@ -45,6 +45,12 @@ export const socials = {
   facebook: 'https://www.facebook.com/aashray.for.animals/',
 };
 
+/* ---------- Volunteer form (env var overrides this default) ---------- */
+
+export const volunteerFormUrl = String(
+  import.meta.env.PUBLIC_VOLUNTEER_FORM_URL || 'https://forms.gle/zvoh3de7GUhzjEk87'
+).trim();
+
 /* ---------- Shelters ---------- */
 
 export const shelters = [
