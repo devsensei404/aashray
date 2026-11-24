@@ -48,7 +48,7 @@ export const socials = {
 /* ---------- Volunteer form (env var overrides this default) ---------- */
 
 export const volunteerFormUrl = String(
-  import.meta.env.PUBLIC_VOLUNTEER_FORM_URL || 'https://forms.gle/zvoh3de7GUhzjEk87'
+  import.meta.env.PUBLIC_VOLUNTEER_FORM_URL || 'https://forms.gle/'
 ).trim();
 
 /* ---------- Shelters ---------- */
