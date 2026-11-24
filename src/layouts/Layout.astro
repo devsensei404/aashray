@@ -1,0 +1,276 @@
+---
+import '@fontsource/instrument-serif';
+import '@fontsource-variable/hanken-grotesk';
+import '../styles/global.css';
+import { siteName, socials, email, developer, waLink, messages } from '../data/contact.js';
+
+const { title, description } = Astro.props;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : null;
+const path = Astro.url.pathname.replace(/\/$/, '');
+
+const nav = [
+  { href: '/our-work', label: 'Our work' },
+  { href: '/adopt', label: 'Adopt & foster' },
+  { href: '/volunteer', label: 'Volunteer' },
+  { href: '/donate', label: 'Donate' },
+  { href: '/contact', label: 'Contact' },
+];
+
+// Footer icons. Anything without a value is hidden.
+const social = [
+  socials.instagram && { href: socials.instagram, label: 'Instagram', icon: 'instagram', external: true },
+  socials.facebook && { href: socials.facebook, label: 'Facebook', icon: 'facebook', external: true },
+  waLink(messages.general) && { href: waLink(messages.general), label: 'WhatsApp', icon: 'whatsapp', external: true },
+  email && { href: `mailto:${email}`, label: 'Email', icon: 'mail', external: false },
+].filter(Boolean);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap bar">
+        <a class="brand" href="/" aria-label={`${siteName}, home`}>
+          <img src="/logo-mark.png" alt="" width="62" height="40" />
+          <span>{siteName}</span>
+        </a>
+
+        <nav class="nav-desktop" aria-label="Main">
+          <ul>
+            {nav.map((item) => (
+              <li>
+                <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <!-- Phone menu: plain HTML <details>, no JavaScript -->
+        <details class="menu">
+          <summary aria-label="Menu">
+            <svg class="i-open" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+            <svg class="i-close" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+          </summary>
+          <nav class="menu-panel" aria-label="Menu">
+            <ul>
+              {nav.map((item) => (
+                <li>
+                  <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </details>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap foot">
+        <div>
+          <img class="foot-logo" src="/logo-full.png" alt={siteName} width="109" height="96" loading="lazy" />
+          <p class="foot-desc">An animal welfare organisation in Durgapur, West Bengal, caring for street animals.</p>
+          {social.length > 0 && (
+            <ul class="social">
+              {social.map((s) => (
+                <li>
+                  <a
+                    href={s.href}
+                    aria-label={s.label}
+                    title={s.label}
+                    {...(s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  >
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      {s.icon === 'instagram' && (
+                        <>
+                          <rect x="3" y="3" width="18" height="18" rx="5" />
+                          <circle cx="12" cy="12" r="4" />
+                          <path d="M17.5 6.5h.01" />
+                        </>
+                      )}
+                      {s.icon === 'facebook' && (
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                      )}
+                      {s.icon === 'whatsapp' && (
+                        <>
+                          <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+                          <path d="M9.2 8.4c-.4.6-.2 1.8 1.1 3.3s2.6 2.2 3.4 2.2c.5 0 1-.4 1.2-.9l-1.5-.9-.7.6c-.7-.3-1.7-1.2-2-1.9l.6-.7-.8-1.6c-.3-.2-.6-.2-.8-.1z" />
+                        </>
+                      )}
+                      {s.icon === 'mail' && (
+                        <>
+                          <rect x="2" y="4" width="20" height="16" rx="2" />
+                          <path d="m22 7-10 6L2 7" />
+                        </>
+                      )}
+                    </svg>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <ul class="foot-links">
+          {nav.map((item) => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="wrap meta">
+        <p class="copy">© {new Date().getFullYear()} {siteName}</p>
+        <p class="credit">
+          Developed with
+          <span role="img" aria-label="love">
+            <svg class="heart" viewBox="-14 -14 28 26" width="14" height="13" aria-hidden="true"><path d="M0,10 C-14,0 -12,-12 -4,-12 C-1,-12 0,-9 0,-8 C0,-9 1,-12 4,-12 C12,-12 14,0 0,10Z" fill="currentColor" /></svg>
+          </span>
+          by <a href={developer.url} target="_blank" rel="noopener noreferrer">{developer.name}</a>, a member of {siteName}.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-header { position: relative; z-index: 20; background: var(--bg); }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.5rem;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 2.75rem;
+    font-family: var(--display);
+    font-size: clamp(1.3rem, 5.5vw, 1.625rem);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+  .brand img { height: 2.5rem; width: auto; max-width: none; flex: none; }
+
+  /* Desktop menu (shown from 960px) */
+  .nav-desktop { display: none; }
+  .nav-desktop ul { display: flex; gap: 1.75rem; }
+  .nav-desktop a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--soft);
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-desktop a:hover, .nav-desktop a[aria-current='page'] { color: var(--ink); }
+
+  /* Phone menu */
+  .menu summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    color: var(--ink);
+    cursor: pointer;
+    list-style: none;
+    transition: background-color 0.2s;
+  }
+  .menu summary::-webkit-details-marker { display: none; }
+  .menu summary:hover { background: var(--panel); }
+  .menu .i-close { display: none; }
+  .menu[open] .i-open { display: none; }
+  .menu[open] .i-close { display: block; }
+  .menu-panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 0.25rem var(--pad) 1rem;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+  }
+  .menu-panel ul { max-width: var(--wrap); margin-inline: auto; }
+  .menu-panel a {
+    display: flex;
+    align-items: center;
+    min-height: 3.25rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    font-size: 1.0625rem;
+    text-decoration: none;
+  }
+  .menu-panel li:last-child a { border-bottom: 0; }
+  .menu-panel a[aria-current='page'] { color: var(--accent); font-weight: 600; }
+
+  @media (min-width: 60rem) {
+    .nav-desktop { display: block; }
+    .menu { display: none; }
+  }
+
+  .site-footer { background: var(--panel); padding-block: 3.5rem 2rem; }
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .foot-logo { display: block; height: clamp(4.5rem, 13vw, 6rem); width: auto; max-width: 100%; }
+  .foot-desc { max-width: 26rem; margin-top: 0.5rem; color: var(--soft); font-size: 0.9375rem; }
+  .social { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.25rem 0 0; }
+  .social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--ink);
+    transition:
+      transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background-color 0.2s,
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .social a:active { transform: scale(0.94); }
+  /* One small hop on hover or keyboard focus. Skipped for reduced motion (see global.css). */
+  @media (hover: hover) {
+    .social a:hover { transform: translateY(-4px); background: var(--accent); border-color: var(--accent); color: #fff; }
+  }
+  .social a:focus-visible { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .foot-links { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.9375rem; }
+  .foot-links a { display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; color: var(--soft); }
+  .foot-links a:hover { color: var(--ink); text-decoration: underline; }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    margin-top: 3rem;
+    color: var(--mute);
+    font-size: 0.875rem;
+  }
+  .credit a { color: var(--soft); text-underline-offset: 0.2em; display: inline-block; padding-block: 0.75rem; margin-block: -0.75rem; }
+  .credit a:hover { color: var(--ink); }
+  .heart { display: inline-block; vertical-align: -1px; margin-inline: 0.1rem; color: #d9363e; }
+</style>

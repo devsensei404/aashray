@@ -1,0 +1,12 @@
+---
+import { waLink } from '../data/contact.js';
+
+const { message, label, variant = 'link' } = Astro.props;
+const href = waLink(message);
+const cls = `btn btn--${variant}`;
+---
+{href ? (
+  <a class={cls} href={href} target="_blank" rel="noopener noreferrer">{label}</a>
+) : (
+  <span class={`${cls} is-disabled`} aria-disabled="true">{label} (number pending)</span>
+)}

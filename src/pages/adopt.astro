@@ -1,0 +1,26 @@
+---
+import ComingSoonPage from '../components/ComingSoonPage.astro';
+import { messages } from '../data/contact.js';
+---
+<ComingSoonPage
+  title="Adopt and Foster | Aashray for Animals"
+  description="Adopt or foster a dog with Aashray for Animals in Durgapur. We encourage adopting Indie dogs rather than buying."
+  heading="Adopt and foster"
+  lede="We encourage adopting dogs, especially Indie dogs, rather than buying."
+  sections={[
+    {
+      id: 'adopt',
+      title: 'Adopt a dog',
+      text: 'Animals looking for homes will be listed here.',
+    },
+    {
+      id: 'foster',
+      title: 'Foster an animal',
+      text: 'Could you care for an animal for a while? Fostering helps when a permanent home is not yet possible.',
+    },
+  ]}
+  ctas={[
+    { label: 'Ask about adoption', message: messages.adoption },
+    { label: 'Ask about fostering', message: messages.fostering, variant: 'outline' },
+  ]}
+/>

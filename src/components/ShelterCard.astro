@@ -1,0 +1,69 @@
+---
+const { shelter, hours } = Astro.props;
+---
+<article class:list={['shelter', { first: shelter.recommended }]}>
+  {shelter.recommended && <p class="tag">Visit here first</p>}
+  <h3>{shelter.name}</h3>
+
+  {shelter.address
+    ? <address>{shelter.address}</address>
+    : <p class="muted">Address coming soon.</p>}
+
+  <p class="blurb">
+    {shelter.recommended
+      ? 'We recommend visiting our A Zone shelter first. Aashray generally has someone available here, making it a convenient starting point for visitors.'
+      : 'Visitors are welcome at our second shelter too.'}
+  </p>
+
+  <h4>Visiting hours</h4>
+  <dl class="hours">
+    {hours.map((h) => (
+      <>
+        <dt>{h.days}</dt>
+        <dd>{h.times.map((t) => <span class="time">{t}</span>)}</dd>
+      </>
+    ))}
+  </dl>
+
+  {shelter.mapsUrl && (
+    <a class="btn btn--outline" href={shelter.mapsUrl} target="_blank" rel="noopener noreferrer">
+      Get directions
+    </a>
+  )}
+</article>
+
+<style>
+  .shelter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: clamp(1.5rem, 3.5vw, 2.5rem);
+    border: 1px solid var(--line);
+    border-radius: 1.25rem;
+    background: var(--bg);
+  }
+  .shelter.first { background: var(--panel); border-color: transparent; }
+
+  .tag {
+    padding: 0.2rem 0.75rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+  h3 { font-size: 1.375rem; }
+  address, .blurb { color: var(--soft); max-width: 30rem; }
+  h4 { margin-top: 1rem; font-size: 0.9375rem; font-weight: 600; }
+  .hours {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.35rem 1.5rem;
+    color: var(--soft);
+    font-size: 0.9375rem;
+  }
+  .hours dt { color: var(--ink); }
+  .time { display: block; }
+  .btn { margin-top: 1rem; }
+</style>

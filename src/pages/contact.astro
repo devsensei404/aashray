@@ -1,0 +1,147 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ShelterCard from '../components/ShelterCard.astro';
+import WhatsAppLink from '../components/WhatsAppLink.astro';
+import { messages, shelters, visitingHours, email, telLink, displayPhone } from '../data/contact.js';
+
+// Short signposts: each topic has its own page.
+const topics = [
+  { title: 'Adoption', hint: 'Give a dog a home', href: '/adopt' },
+  { title: 'Fostering', hint: 'Care for an animal for a while', href: '/adopt#foster' },
+  { title: 'Volunteering', hint: 'We need more volunteers', href: '/volunteer' },
+  { title: 'Neutering and veterinary', hint: 'Street animals and pets', href: '/our-work#neutering' },
+  { title: 'Donations and supplies', hint: 'Ways to help', href: '/donate' },
+];
+---
+<Layout
+  title="Contact Aashray for Animals | Durgapur"
+  description="Contact Aashray for Animals in Durgapur to enquire about animal rescue, adoption, volunteering, donations, neutering services and shelter visits."
+>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Get in touch</h1>
+      <p class="lede">
+        Have a question or want to visit a shelter? Message us and we will point you in the right direction.
+      </p>
+
+      <div class="cta">
+        <WhatsAppLink variant="primary" label="Message us on WhatsApp" message={messages.general} />
+        {telLink && <a class="btn btn--outline call-btn" href={telLink}>Call {displayPhone}</a>}
+      </div>
+
+      {(telLink || email) && (
+        <ul class="reach">
+          {telLink && (
+            <li class="reach-phone">Call us on <a class="btn btn--link" href={telLink}>{displayPhone}</a></li>
+          )}
+          {email && (
+            <li>Email us at <a class="btn btn--link" href={`mailto:${email}`}>{email}</a></li>
+          )}
+        </ul>
+      )}
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="visit">
+    <div class="wrap">
+      <h2 id="visit">Visit our shelters</h2>
+      <p class="lede intro">
+        Aashray runs two shelters in Durgapur, and visitors are welcome at both.
+        Please message us before you travel so we can guide you.
+      </p>
+      <div class="shelters">
+        {shelters.map((s) => <ShelterCard shelter={s} hours={visitingHours} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="rescue" aria-labelledby="help">
+    <div class="wrap">
+      <div class="panel">
+        <h2 id="help">Need help with an animal?</h2>
+        <div class="rescue-copy">
+          <p>
+            Found an injured or distressed street animal? If it is safe and feasible for you to
+            bring the animal to one of our shelters, that is generally the best way to get it to Aashray.
+          </p>
+          <p>
+            We currently have limited rescue transportation facilities and cannot guarantee
+            on-site pickup or emergency response. Please contact us before travelling so we can guide you.
+          </p>
+        </div>
+        <WhatsAppLink variant="primary" label="Message us about an animal" message={messages.rescue} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section more" aria-labelledby="else">
+    <div class="wrap">
+      <h2 id="else">Looking for something else?</h2>
+      <ul class="topics">
+        {topics.map((t) => (
+          <li>
+            <a class="topic" href={t.href}>
+              <span class="topic-title">{t.title}</span>
+              <span class="topic-hint">{t.hint}</span>
+              <svg class="chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero { padding-block: clamp(3.5rem, 10vw, 8rem) var(--space-section); }
+  .hero h1 { margin-bottom: 1.5rem; }
+  .hero .lede { margin-bottom: 2.25rem; }
+
+  .cta { display: flex; flex-direction: column; gap: 0.75rem; }
+  /* Phones get a Call button; desktops show the number as text instead */
+  .call-btn { display: inline-flex; }
+  .reach { margin-top: 1.25rem; display: grid; gap: 0.1rem; color: var(--soft); }
+  .reach li { display: flex; flex-wrap: wrap; align-items: center; gap: 0 0.4rem; overflow-wrap: anywhere; }
+  .reach-phone { display: none !important; }
+  @media (min-width: 48rem) {
+    .call-btn { display: none; }
+    .reach-phone { display: flex !important; }
+  }
+  @media (min-width: 40.01rem) { .cta { flex-direction: row; align-items: center; } }
+
+  .intro { margin-block: 1.25rem 3rem; }
+  .shelters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: 1.25rem;
+  }
+
+  .rescue { padding-bottom: var(--space-section); }
+  .panel { padding: clamp(2rem, 6vw, 4.5rem); border-radius: 1.75rem; background: var(--panel); }
+  .rescue-copy { max-width: 36rem; margin-block: 1.5rem 2.25rem; display: grid; gap: 1rem; color: var(--soft); }
+
+  .more { padding-top: 0; }
+  .topics { margin-top: 2rem; border-top: 1px solid var(--line); }
+  .topic {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.1rem 1rem;
+    min-height: 3.75rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+  }
+  .topic-title { font-weight: 600; }
+  .topic-hint { grid-column: 1; color: var(--mute); font-size: 0.9375rem; }
+  .chev { grid-column: 2; grid-row: 1 / span 2; color: var(--mute); transition: transform 0.25s, color 0.2s; }
+  @media (hover: hover) {
+    .topic:hover .topic-title { color: var(--accent); }
+    .topic:hover .chev { color: var(--accent); transform: translateX(4px); }
+  }
+  @media (min-width: 40rem) {
+    .topic { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) auto; min-height: 3.5rem; }
+    .topic-hint { grid-column: 2; }
+    .chev { grid-column: 3; grid-row: 1; }
+  }
+</style>

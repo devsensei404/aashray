@@ -1,0 +1,26 @@
+---
+import ComingSoonPage from '../components/ComingSoonPage.astro';
+import { messages } from '../data/contact.js';
+---
+<ComingSoonPage
+  title="Our Work | Aashray for Animals"
+  description="How Aashray for Animals cares for street animals in Durgapur, including sterilisation and neutering."
+  heading="Our work"
+  lede="Aashray cares for street animals in Durgapur, especially Indie dogs."
+  sections={[
+    {
+      id: 'sterilisation',
+      title: 'Street-animal sterilisation',
+      text: 'Aashray sterilises street animals when resources and funds allow, and often bears the cost itself.',
+    },
+    {
+      id: 'neutering',
+      title: 'Neutering for pets',
+      text: 'If you own a pet, you can ask Aashray about neutering. Owners are charged for this service.',
+    },
+  ]}
+  ctas={[
+    { label: 'Ask about pet neutering', message: messages.petNeutering },
+    { label: 'Ask about street animals', message: messages.streetSterilisation, variant: 'outline' },
+  ]}
+/>

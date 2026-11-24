@@ -1,0 +1,71 @@
+---
+import Layout from '../layouts/Layout.astro';
+import WhatsAppLink from './WhatsAppLink.astro';
+
+// Placeholder page shell: heading, intro, optional sections, WhatsApp buttons.
+// sections: [{ id, title, text }]   ctas: [{ label, message, variant }]
+const { title, description, heading, lede, sections = [], ctas = [] } = Astro.props;
+---
+<Layout title={title} description={description}>
+  <section class="hero">
+    <div class="wrap">
+      <h1>{heading}</h1>
+      <p class="lede">{lede}</p>
+      <p class="soon">Coming soon</p>
+    </div>
+  </section>
+
+  {sections.map((s) => (
+    <section class="section part" id={s.id}>
+      <div class="wrap">
+        <h2>{s.title}</h2>
+        <p class="part-text">{s.text}</p>
+        <p class="soon">Details coming soon</p>
+      </div>
+    </section>
+  ))}
+
+  {ctas.length > 0 && (
+    <section class="meanwhile">
+      <div class="wrap">
+        <div class="panel">
+          <h2>In the meantime</h2>
+          <p class="panel-text">Have a question? Message us on WhatsApp and we will point you in the right direction.</p>
+          <div class="ctas">
+            {ctas.map((c) => (
+              <WhatsAppLink variant={c.variant ?? 'primary'} label={c.label} message={c.message} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>
+
+<style>
+  .hero { padding-block: clamp(3.5rem, 10vw, 8rem) clamp(2.5rem, 6vw, 4rem); }
+  .hero h1 { margin-bottom: 1.5rem; }
+  .hero .lede { margin-bottom: 1.75rem; }
+
+  .soon {
+    display: inline-block;
+    padding: 0.2rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--soft);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .part { scroll-margin-top: 1rem; padding-block: clamp(2.5rem, 6vw, 4rem); border-top: 1px solid var(--line); }
+  .part h2 { font-size: clamp(1.875rem, 4vw, 2.75rem); margin-bottom: 1rem; }
+  .part-text { max-width: 34rem; margin-bottom: 1.25rem; color: var(--soft); }
+
+  .meanwhile { padding-block: clamp(2.5rem, 6vw, 4rem) var(--space-section); }
+  .panel { padding: clamp(2rem, 6vw, 4rem); border-radius: 1.75rem; background: var(--panel); }
+  .panel h2 { font-size: clamp(1.875rem, 4vw, 2.75rem); margin-bottom: 1rem; }
+  .panel-text { max-width: 32rem; margin-bottom: 2rem; color: var(--soft); }
+  .ctas { display: flex; flex-direction: column; gap: 0.75rem; }
+  @media (min-width: 40.01rem) { .ctas { flex-direction: row; flex-wrap: wrap; } }
+</style>

@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const links = [
+  { title: 'Our work', text: 'What we do for street animals in Durgapur.', href: '/our-work', label: 'See our work' },
+  { title: 'Adopt and foster', text: 'Give a dog a home, for good or for a while.', href: '/adopt', label: 'Adopt or foster' },
+  { title: 'Volunteer', text: 'We need more hands. Come and help.', href: '/volunteer', label: 'Volunteer with us' },
+  { title: 'Donate', text: 'Help us keep caring for animals.', href: '/donate', label: 'Ways to give' },
+  { title: 'Contact', text: 'Find our shelters and get in touch.', href: '/contact', label: 'Contact us' },
+];
+---
+<Layout
+  title="Aashray for Animals | Durgapur"
+  description="Aashray for Animals is an animal welfare organisation in Durgapur, West Bengal, caring for street animals, especially Indie dogs."
+>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Aashray for Animals</h1>
+      <p class="lede">
+        An animal welfare organisation in Durgapur, West Bengal, caring for street animals,
+        especially Indie dogs.
+      </p>
+      <p class="soon">Full home page coming soon</p>
+    </div>
+  </section>
+
+  <section class="links-section">
+    <div class="wrap">
+      <ul class="links">
+        {links.map((l) => (
+          <li class="link-row">
+            <h2>{l.title}</h2>
+            <p class="link-text">{l.text}</p>
+            <div class="link-action"><a class="btn btn--link" href={l.href}>{l.label}</a></div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero { padding-block: clamp(3.5rem, 10vw, 8rem) clamp(2.5rem, 6vw, 4rem); }
+  .hero h1 { margin-bottom: 1.5rem; }
+  .hero .lede { margin-bottom: 1.75rem; }
+  .soon {
+    display: inline-block;
+    padding: 0.2rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--soft);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .links-section { padding-bottom: var(--space-section); }
+  .links { border-top: 1px solid var(--line); }
+  .link-row {
+    display: grid;
+    gap: 0.5rem 3rem;
+    padding-block: 1.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .link-row h2 { font-family: var(--sans); font-size: 1.125rem; font-weight: 600; letter-spacing: 0; line-height: 1.3; }
+  .link-text { color: var(--soft); }
+  .link-action { display: flex; }
+  @media (min-width: 52rem) {
+    .link-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr) minmax(0, 1fr); align-items: start; }
+    .link-action { justify-content: flex-end; }
+  }
+</style>
