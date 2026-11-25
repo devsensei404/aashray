@@ -1,26 +1,145 @@
 ---
-import ComingSoonPage from '../components/ComingSoonPage.astro';
-import { messages } from '../data/contact.js';
+import Layout from '../layouts/Layout.astro';
+import WhatsAppLink from '../components/WhatsAppLink.astro';
+import { messages, visitingHours, adoptAnimalMessage, sponsorAnimalMessage } from '../data/contact.js';
+import { animals } from '../data/animals.js';
+
+const groups = [
+  { id: 'adoptable', title: 'Ready for a home', intro: 'These animals are looking for a home.', key: 'adoptable' },
+  { id: 'residents', title: 'Our residents', intro: 'These animals live at the shelter long term.', key: 'resident' },
+  { id: 'rescues', title: 'Rescued animals', intro: 'These animals were rescued and are being cared for.', key: 'rescue' },
+]
+  .map((g) => ({ ...g, items: animals.filter((a) => a.group === g.key) }))
+  .filter((g) => g.items.length > 0);
+
+const ageLabel = { adult: 'Adult', young: 'Young' };
+const meta = (a) =>
+  [ageLabel[a.ageGroup], a.species, a.atShelterFor && `${a.atShelterFor} at the shelter`].filter(Boolean).join(' · ');
 ---
-<ComingSoonPage
+<Layout
   title="Adopt and Foster | Aashray for Animals"
   description="Adopt or foster a dog with Aashray for Animals in Durgapur. We encourage adopting Indie dogs rather than buying."
-  heading="Adopt and foster"
-  lede="We encourage adopting dogs, especially Indie dogs, rather than buying."
-  sections={[
-    {
-      id: 'adopt',
-      title: 'Adopt a dog',
-      text: 'Animals looking for homes will be listed here.',
-    },
-    {
-      id: 'foster',
-      title: 'Foster an animal',
-      text: 'Could you care for an animal for a while? Fostering helps when a permanent home is not yet possible.',
-    },
-  ]}
-  ctas={[
-    { label: 'Ask about adoption', message: messages.adoption },
-    { label: 'Ask about fostering', message: messages.fostering, variant: 'outline' },
-  ]}
-/>
+>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Adopt, foster and sponsor</h1>
+      <p class="lede">We encourage adopting dogs, especially Indie dogs, rather than buying.</p>
+      <div class="cta">
+        <WhatsAppLink variant="primary" label="Ask about adoption" message={messages.adoption} />
+      </div>
+      {groups.length > 0 && (
+        <nav class="jump" aria-label="Animal groups">
+          {groups.map((g) => <a class="btn btn--link" href={`#${g.id}`}>{g.title}</a>)}
+        </nav>
+      )}
+    </div>
+  </section>
+
+  <section class="block" id="animals" aria-labelledby="animals-title">
+    <div class="wrap">
+      <h2 id="animals-title">Our animals</h2>
+      {groups.length === 0 && (
+        <p class="copy">Animals will be listed here soon. Message us to ask who is looking for a home.</p>
+      )}
+      {groups.map((g) => (
+        <div class="group" id={g.id}>
+          <h3 class="group-title">{g.title}</h3>
+          <p class="copy">{g.intro}</p>
+          <ul class="grid">
+            {g.items.map((a) => (
+              <li class="card">
+                {a.photo
+                  ? <img src={a.photo} alt={a.name} width="800" height="600" loading="lazy" />
+                  : <div class="nophoto" aria-hidden="true"></div>}
+                <div class="body">
+                  <h4>{a.name}</h4>
+                  {meta(a) && <p class="meta">{meta(a)}</p>}
+                  <p class="story">{a.story || 'Story coming soon.'}</p>
+                  <div class="actions">
+                    {g.key === 'adoptable' && (
+                      <WhatsAppLink variant="primary" label={`Adopt ${a.name}`} message={adoptAnimalMessage(a.name)} />
+                    )}
+                    <WhatsAppLink variant={g.key === 'adoptable' ? 'outline' : 'primary'} label={`Sponsor ${a.name}`} message={sponsorAnimalMessage(a.name)} />
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="block" id="foster" aria-labelledby="foster-title">
+    <div class="wrap">
+      <h2 id="foster-title">Foster an animal</h2>
+      <p class="copy">Could you care for an animal for a while? Fostering helps when a permanent home is not yet possible.</p>
+      <p class="soon">Details coming soon</p>
+      <div class="cta">
+        <WhatsAppLink variant="outline" label="Ask about fostering" message={messages.fostering} />
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="visit-title">
+    <div class="wrap">
+      <h2 id="visit-title">Come and meet them</h2>
+      <p class="copy">You are welcome to visit a shelter during visiting hours.</p>
+      <dl class="hours">
+        {visitingHours.map((h) => (
+          <>
+            <dt>{h.days}</dt>
+            <dd>{h.times.map((t) => <span class="time">{t}</span>)}</dd>
+          </>
+        ))}
+      </dl>
+      <a class="btn btn--link" href="/contact#visit">Find our shelters</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero { padding-block: clamp(3.5rem, 10vw, 8rem) var(--space-section); }
+  .hero h1 { margin-bottom: 1.5rem; }
+  .hero .lede { margin-bottom: 2.25rem; }
+
+  .cta { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.75rem; }
+  .hero .cta { margin-top: 0; }
+  @media (min-width: 40.01rem) { .cta { flex-direction: row; align-items: center; } }
+
+  .jump { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin-top: 1.5rem; }
+
+  .block { scroll-margin-top: 1rem; padding-block: var(--space-section); border-top: 1px solid var(--line); }
+  .block h2 { margin-bottom: 1.25rem; }
+  .copy { max-width: 36rem; color: var(--soft); }
+  .soon {
+    display: inline-block;
+    margin-top: 1.25rem;
+    padding: 0.2rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--soft);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .group { scroll-margin-top: 1rem; margin-top: 3rem; }
+  .group:first-of-type { margin-top: 2rem; }
+  .group-title { font-size: 1.5rem; margin-bottom: 0.35rem; }
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; margin-top: 1.5rem; }
+  @media (min-width: 40rem) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+  .card { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 1.25rem; background: var(--bg); }
+  .card img, .nophoto { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--panel); }
+  .body { display: flex; flex: 1; flex-direction: column; padding: 1.25rem; }
+  .body h4 { font-family: var(--sans); font-size: 1.25rem; font-weight: 600; }
+  .meta { margin-top: 0.25rem; color: var(--mute); font-size: 0.875rem; }
+  .story { margin-top: 0.75rem; color: var(--soft); }
+  .actions { display: flex; flex-direction: column; gap: 0.75rem; margin-top: auto; padding-top: 1.25rem; }
+  .actions :global(.btn) { width: 100%; justify-content: center; }
+
+  .hours { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1.5rem; max-width: 36rem; margin-block: 1.75rem 0.75rem; color: var(--soft); font-size: 0.9375rem; }
+  .hours dt { color: var(--ink); }
+  .time { display: block; }
+</style>

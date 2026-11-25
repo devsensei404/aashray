@@ -57,7 +57,7 @@ export const shelters = [
   {
     id: 'a-zone',
     name: 'A Zone shelter',
-    address: '19/20 Vivekananda Road, A Zone, Durgapur, West Bengal, India',
+    address: '19/20 Vivekananda Road, A Zone, Durgapur - 713204, West Bengal, India',
     mapsUrl: 'https://maps.app.goo.gl/FWgq4hymx2HP9XQWA',
     recommended: true,
   },
@@ -93,4 +93,14 @@ export const messages = {
     'Hello Aashray, I would like to ask about neutering for my pet. Could you please share the procedure, availability and charges?',
   donation:
     'Hello Aashray, I would like to contribute to your work. Could you please share the ways I can help?',
+  membership:
+    'Hello Aashray, I would like to become a member. Could you please share how it works?',
+  taxReceipt:
+    'Hello Aashray, I would like to know more about the 80G tax exemption on donations.',
 };
+
+export const adoptAnimalMessage = (name) =>
+  `Hello Aashray, I would like to adopt ${name}. Could you please share the next steps?`;
+
+export const sponsorAnimalMessage = (name) =>
+  `Hello Aashray, I would like to sponsor ${name}. Could you please share how it works?`;

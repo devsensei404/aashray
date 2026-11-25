@@ -1,11 +1,101 @@
 ---
-import ComingSoonPage from '../components/ComingSoonPage.astro';
-import { messages } from '../data/contact.js';
+import Layout from '../layouts/Layout.astro';
+import WhatsAppLink from '../components/WhatsAppLink.astro';
+import UpiPay from '../components/UpiPay.astro';
+import { messages, siteName, shelters } from '../data/contact.js';
+import { membership, donations } from '../data/site-settings.js';
+
+const { monthlyAmount, formUrl } = membership;
+const postShelter = shelters.find((sh) => sh.recommended && sh.address) ?? shelters.find((sh) => sh.address);
+const { taxReceiptNote, milaapUrl, amazonWishlistUrl, upiId, upiQrImage } = donations;
 ---
-<ComingSoonPage
+<Layout
   title="Donate | Aashray for Animals"
   description="Support the work of Aashray for Animals in Durgapur with a donation or by giving food and supplies."
-  heading="Donate"
-  lede="The ways to support Aashray's work, through donations, food and supplies, will be listed here."
-  ctas={[{ label: 'Ask how to help', message: messages.donation }]}
-/>
+>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Donate</h1>
+      <p class="lede">There are several ways to support Aashray's work for street animals in Durgapur. You can donate once, whenever you like.</p>
+
+      {upiId && <UpiPay upiId={upiId} payeeName={siteName} fallbackImage={upiQrImage} />}
+      {taxReceiptNote && <p class="note">{taxReceiptNote}</p>}
+
+      <div class="cta">
+        {upiId
+          ? <WhatsAppLink variant="link" label="Ask how to donate" message={messages.donation} />
+          : <WhatsAppLink variant="primary" label="Ask how to donate" message={messages.donation} />}
+        {taxReceiptNote && (
+          <WhatsAppLink variant="link" label="Ask about 80G details" message={messages.taxReceipt} />
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="member">
+    <div class="wrap">
+      <h2 id="member">Become a member</h2>
+      <p class="copy">
+        {monthlyAmount
+          ? `Become a member with a donation of ₹${monthlyAmount} a month. `
+          : 'Become a member with a monthly donation. '}
+        Your steady support goes toward food, vaccines and emergency care for the animals.
+      </p>
+      <div class="cta">
+        {formUrl
+          ? <a class="btn btn--outline" href={formUrl} target="_blank" rel="noopener noreferrer">Join as a member</a>
+          : <WhatsAppLink variant="outline" label="Ask about membership" message={messages.membership} />}
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="post">
+    <div class="wrap">
+      <h2 id="post">Send supplies or a cheque</h2>
+      <p class="copy">
+        Prefer to send something by post or courier? You can send supplies or a cheque to our shelter. Please message us first so we can confirm what is needed and how to make out a cheque.
+      </p>
+      {postShelter
+        ? <address class="address">{postShelter.name}<br />{postShelter.address}</address>
+        : <p class="copy">Message us and we will share our address.</p>}
+      <div class="links">
+        <WhatsAppLink variant="link" label="Message us first" message={messages.donation} />
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="other">
+    <div class="wrap">
+      <h2 id="other">Other ways to support</h2>
+      <p class="copy">A few more ways to help.</p>
+      <div class="links">
+        <a class="btn btn--link" href="/adopt#animals">Sponsor an individual animal</a>
+        {milaapUrl && (
+          <a class="btn btn--link" href={milaapUrl} target="_blank" rel="noopener noreferrer">Support us on Milaap</a>
+        )}
+        {amazonWishlistUrl && (
+          <a class="btn btn--link" href={amazonWishlistUrl} target="_blank" rel="noopener noreferrer">Amazon wish list</a>
+        )}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero { padding-block: clamp(3.5rem, 10vw, 8rem) var(--space-section); }
+  .hero h1 { margin-bottom: 1.5rem; }
+  .hero .lede { margin-bottom: 2.25rem; }
+  .note { max-width: 36rem; margin-top: 1.25rem; color: var(--soft); }
+
+  .cta { display: flex; flex-direction: column; gap: 0.75rem; }
+  .hero .cta { margin-top: 1.25rem; }
+  .block .cta { margin-top: 1.75rem; }
+  @media (min-width: 40.01rem) { .cta { flex-direction: row; align-items: center; } }
+
+  .block { padding-block: var(--space-section); border-top: 1px solid var(--line); }
+  .block h2 { margin-bottom: 1.25rem; }
+  .copy { max-width: 36rem; color: var(--soft); }
+
+  .address { max-width: 36rem; margin-top: 1.5rem; font-style: normal; color: var(--ink); }
+  .links { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin-top: 1rem; }
+</style>
