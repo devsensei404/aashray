@@ -24,7 +24,7 @@ export const membership = {
 export const donations = {
   taxReceiptNote: 'Donations to Aashray can qualify for 80G tax exemption.',
   milaapUrl: 'https://milaap.org/fundraisers/support-durgapur-aashray-for-animals',
-  amazonWishlistUrl: 'www.amzn.in/hz/wishlist/ls/3K0VZ7X1Y2F4?ref_=wl_share',
+  amazonWishlistUrl: 'https://www.amazon.in/hz/wishlist/ls/2SR05ECNSTZ9Z?ref_=wl_share',
   upiId: 'abcd123@okbank',
   upiQrImage: '',
 };
